@@ -65,3 +65,114 @@ backend/
     └── cv.md                   # My CV
 
 ```
+
+### Frontend
+
+The frontend is a Svelte-based application that provides a user-friendly interface for submitting questions and receiving answers.
+
+- User Input
+
+  - A single input field for users to ask questions.
+
+- Dynamic Updates:
+
+  - Displays the response from the backend in real-time.
+
+- Keyboard Submission:
+  - Supports pressing Enter for question submission.
+
+**Key Components:**
+
+1. App.svelte:
+
+   - The main Svelte component handling user input, API calls, and response rendering.
+
+2. API Integration:
+   - Sends user queries to the `/ask` endpoint in the backend.
+
+**Directory Structure:**
+
+```
+frontend/
+│
+├── public/                 # Publicly served assets
+│
+├── src/                    # Source files
+│   ├── App.svelte          # Main Svelte application
+│   └── main.js             # Entry point for the Svelte app
+│
+└── package.json            # Project dependencies
+
+```
+
+## Setup
+
+### Prerequisites
+
+1. Python 3.10.9 (backend)
+2. FAISS (for similarity search)
+3. OpenAI API Key (for embeddings and GPT responses)
+4. Node.js 20.10+ (frontend)
+
+### Backend Setup
+
+1. Navigate to the Backend Folder
+
+```
+cd backend
+```
+
+2. Create a Virtual Environment
+
+```
+python -m venv venv
+venv\Scripts\activate  # source venv/bin/activate on Unix or MacOS
+```
+
+3. Install Dependencies
+
+```
+pip install -r requirements.txt
+```
+
+4. Generate Embeddings: Run the preprocessing script to generate embeddings and the FAISS index.
+
+```
+python preprocessing/upload_files.py
+python preprocessing/index_embeddings.py
+```
+
+5. Run the Flask Application
+
+```
+python app/app.py
+```
+
+### Frontend Setup
+
+1. Navigate to the Frontend Folder
+
+```
+cd frontend
+```
+
+2. Install Dependencies
+
+```
+npm install
+```
+
+3. Start the Development Server
+
+```
+npm run dev
+```
+
+4. Access the App: Open your browser and go to http://localhost:8080
+
+## Usage
+
+1. Start both the backend and frontend servers.
+2. Open the app in your browser.
+3. Type a question about Jun and press Enter or click Submit.
+4. View the response dynamically generated based on Jun's documents.
