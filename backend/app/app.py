@@ -14,7 +14,7 @@ CORS(app)  # Enable CORS for all routes
 
 # Set up logging
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
 
