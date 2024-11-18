@@ -92,7 +92,7 @@
     max-width: 700px;
     margin: 0 auto;
     font-family: Arial, sans-serif;
-    background-color: #0d1117;
+    background-color: #0d0d0d;
     color: #bbb;
     border-radius: 6px;
     /* border: 1px solid #555; */
@@ -118,7 +118,7 @@
     margin-left: auto;
   }
   .message.user {
-    background-color: #151b23;
+    background-color: #151515;
     border-radius: 20px;
     color: #ddd;
     padding: 1px 1.1rem;
@@ -139,7 +139,7 @@
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #0d1117;
+    background-color: #0d0d0d;
     padding: 26px 0 20px 0;
     box-shadow: inset 0 1px 0 0 #333;
     /* border: 1px solid red; */
@@ -149,7 +149,7 @@
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    background-color: #151b23;
+    background-color: #151515;
     color: #f0f6fc;
   }
   .button {

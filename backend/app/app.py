@@ -86,7 +86,9 @@ def chat():
         )
 
         # Append context to chat history
-        history.append({"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"})
+        history.append(
+            {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}
+        )
 
         # Generate answer using ChatCompletion with history
         chat_response = client.beta.chat.completions.parse(
