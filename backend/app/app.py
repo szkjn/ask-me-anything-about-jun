@@ -7,6 +7,7 @@ import json
 import numpy as np
 import faiss
 from utils.config import OPENAI_API_KEY, INDEX_FILE, FILENAMES_FILE, DATA_FOLDER
+from utils.prompts import SYSTEM_PROMPT
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -57,11 +58,12 @@ except Exception as e:
     raise e
 
 
-@app.route("/ask", methods=["POST"])
-def ask():
-    logging.info("Received a new question")
+@app.route("/chat", methods=["POST"])
+def chat():
+    logging.info("Received a new chat message")
     data = request.json
     question = data.get("question", "")
+    history = data.get("history", [])  # Expecting a list of message objects
 
     if not question:
         logging.warning("No question provided.")
@@ -69,45 +71,38 @@ def ask():
 
     try:
         # Generate embedding for the question
-        logging.debug("Generating embedding for the question...")
         response = client.embeddings.create(
             model="text-embedding-ada-002", input=question
         )
         query_embedding = np.array(response.data[0].embedding, dtype="float32").reshape(
             1, -1
         )
-        logging.debug("Query embedding generated successfully.")
 
         # Perform similarity search
-        logging.debug("Performing FAISS similarity search.")
-        distances, indices = index.search(query_embedding, k=1)
+        distances, indices = index.search(query_embedding, k=3)  # Retrieve top 3 docs
         retrieved_docs = [filenames[idx] for idx in indices[0]]
-        logging.info(f"Retrieved document(s): {retrieved_docs}")
-
-        # Combine retrieved document(s) into context
-        context = context = "\n\n".join(
+        context = "\n\n".join(
             [document_map[doc] for doc in retrieved_docs if doc in document_map]
         )
 
-        # Construct messages for OpenAI ChatCompletion
-        messages = [
-            {
-                "role": "system",
-                "content": "You are a helpful assistant with access to Jun's documents. Keep your answers below 500 tokens.",
-            },
-            {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"},
-        ]
+        # Append context to chat history
+        history.append(
+            {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}
+        )
 
-        # Generate answer using ChatCompletion
+        # Generate answer using ChatCompletion with history
         chat_response = client.beta.chat.completions.parse(
-            model="gpt-4o-mini", messages=messages, max_tokens=1000
+            model="gpt-4o-mini", messages=history, max_tokens=1000
         )
         answer = chat_response.choices[0].message.content.strip()
-        logging.info("Answer generated successfully.")
-        return jsonify({"answer": answer})
+
+        # Add assistant's response to the history
+        history.append({"role": "assistant", "content": answer})
+        logging.info("Chat response generated successfully.")
+        return jsonify({"answer": answer, "history": history})
 
     except Exception as e:
-        logging.error(f"Error in /ask endpoint: {e}")
+        logging.error(f"Error in /chat endpoint: {e}")
         return (
             jsonify({"error": "An error occurred while processing the request."}),
             500,

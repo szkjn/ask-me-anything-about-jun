@@ -5,7 +5,7 @@ html, body {
 }
 
 body {
-	background-color: #333;
+	background-color: #0d0d0d;
 	color: #333;
 	margin: 0;
 	padding: 8px;
@@ -61,4 +61,24 @@ button:not(:disabled):active {
 
 button:focus {
 	border-color: #666;
+}
+
+/* width */
+::-webkit-scrollbar {
+width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #0d1117;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: #555;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #333;
 }
