@@ -57,6 +57,55 @@ except Exception as e:
     raise e
 
 
+@app.route("/chat", methods=["POST"])
+def chat():
+    logging.info("Received a new chat message")
+    data = request.json
+    question = data.get("question", "")
+    history = data.get("history", [])  # Expecting a list of message objects
+
+    if not question:
+        logging.warning("No question provided.")
+        return jsonify({"error": "No question provided"}), 400
+
+    try:
+        # Generate embedding for the question
+        response = client.embeddings.create(
+            model="text-embedding-ada-002", input=question
+        )
+        query_embedding = np.array(response.data[0].embedding, dtype="float32").reshape(
+            1, -1
+        )
+
+        # Perform similarity search
+        distances, indices = index.search(query_embedding, k=3)  # Retrieve top 3 docs
+        retrieved_docs = [filenames[idx] for idx in indices[0]]
+        context = "\n\n".join(
+            [document_map[doc] for doc in retrieved_docs if doc in document_map]
+        )
+
+        # Append context to chat history
+        history.append({"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"})
+
+        # Generate answer using ChatCompletion with history
+        chat_response = client.beta.chat.completions.parse(
+            model="gpt-4o-mini", messages=history, max_tokens=1000
+        )
+        answer = chat_response.choices[0].message.content.strip()
+
+        # Add assistant's response to the history
+        history.append({"role": "assistant", "content": answer})
+        logging.info("Chat response generated successfully.")
+        return jsonify({"answer": answer, "history": history})
+
+    except Exception as e:
+        logging.error(f"Error in /chat endpoint: {e}")
+        return (
+            jsonify({"error": "An error occurred while processing the request."}),
+            500,
+        )
+
+
 @app.route("/ask", methods=["POST"])
 def ask():
     logging.info("Received a new question")
@@ -93,14 +142,14 @@ def ask():
         messages = [
             {
                 "role": "system",
-                "content": "You are a helpful assistant with access to Jun's documents. Keep your answers below 500 tokens.",
+                "content": "You are a helpful assistant with access to Jun's documents. Keep your answers below 200 tokens.",
             },
             {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"},
         ]
 
         # Generate answer using ChatCompletion
         chat_response = client.beta.chat.completions.parse(
-            model="gpt-4o-mini", messages=messages, max_tokens=1000
+            model="gpt-4o-mini", messages=messages, max_tokens=500
         )
         answer = chat_response.choices[0].message.content.strip()
         logging.info("Answer generated successfully.")

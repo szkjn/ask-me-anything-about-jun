@@ -8,11 +8,11 @@ The app comprises a frontend (built with Svelte) and a backend (built with Flask
 
 ## Features
 
-1. Question Submission:
+1. **Question Submission:**
    - Users can input a question and press Enter or click Submit to send their query.
-2. Dynamic Answer Generation:
+2. **Dynamic Answer Generation:**
    - The app retrieves relevant information from pre-uploaded documents about Jun and generates a natural language answer.
-3. RAG Workflow:
+3. **RAG Workflow:**
    - Uses FAISS to retrieve the most relevant document snippets and passes them as context to OpenAI’s chat model.
 
 ## Architecture
@@ -21,27 +21,27 @@ The app comprises a frontend (built with Svelte) and a backend (built with Flask
 
 The backend is a Flask-based application responsible for:
 
-- Document Preprocessing:
+- **Document Preprocessing:**
 
   - Converts `.md` files into embeddings using OpenAI’s embedding model.
   - Stores embeddings in a FAISS index for efficient similarity search.
 
-- Question Processing:
+- **Question Processing:**
   - Generates embeddings for the user’s question.
   - Retrieves relevant documents using FAISS.
   - Uses OpenAI’s chat model to generate answers based on the retrieved context.
 
 **Key Components:**
 
-1. Preprocessing:
+1. **Preprocessing:**
 
    - Converts `.md` files into embeddings and stores them in `embeddings.index`.
    - Mapping between filenames and embeddings is stored in `filenames.json`.
 
-2. RAG Pipeline:
+2. **RAG Pipeline:**
    - Embeddings for the question are matched with the FAISS index to retrieve relevant documents.
    - Retrieved content is combined into context for OpenAI’s GPT model.
-3. Logging:
+3. **Logging:**
    - Detailed logs for debugging and tracing user queries and backend responses.
 
 **Directory Structure**
@@ -70,24 +70,24 @@ backend/
 
 The frontend is a Svelte-based application that provides a user-friendly interface for submitting questions and receiving answers.
 
-- User Input
+- **User Input:**
 
   - A single input field for users to ask questions.
 
-- Dynamic Updates:
+- **Dynamic Updates:**
 
   - Displays the response from the backend in real-time.
 
-- Keyboard Submission:
+- **Keyboard Submission:**
   - Supports pressing Enter for question submission.
 
 **Key Components:**
 
-1. App.svelte:
+1. **App.svelte:**
 
    - The main Svelte component handling user input, API calls, and response rendering.
 
-2. API Integration:
+2. **API Integration:**
    - Sends user queries to the `/ask` endpoint in the backend.
 
 **Directory Structure:**
@@ -116,55 +116,56 @@ frontend/
 
 ### Backend Setup
 
-1. Navigate to the Backend Folder
+1. Navigate to the Backend Folder:
 
-```
+```bash
 cd backend
 ```
 
-2. Create a Virtual Environment
+2. Create a Virtual Environment:
 
-```
+```bash
 python -m venv venv
 venv\Scripts\activate  # source venv/bin/activate on Unix or MacOS
 ```
 
-3. Install Dependencies
+3. Install Dependencies:
 
-```
+```bash
 pip install -r requirements.txt
 ```
 
 4. Generate Embeddings: Run the preprocessing script to generate embeddings and the FAISS index.
 
-```
+```bash
 python preprocessing/upload_files.py
 python preprocessing/index_embeddings.py
 ```
 
-5. Run the Flask Application
+5. Run the Flask Application from `app/` folder:
 
-```
-python app/app.py
+```bash
+cd app/
+python app.py
 ```
 
 ### Frontend Setup
 
-1. Navigate to the Frontend Folder
+1. Navigate to the Frontend Folder:
 
-```
+```bash
 cd frontend
 ```
 
-2. Install Dependencies
+2. Install Dependencies:
 
-```
+```bash
 npm install
 ```
 
-3. Start the Development Server
+3. Start the Development Server:
 
-```
+```bash
 npm run dev
 ```
 
