@@ -1,0 +1,20 @@
+
+# Front end
+frontend/node_modules/
+frontend/public/build/
+frontend/.env
+
+# Back end
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/.env
+venv/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# System files
+.DS_Store
