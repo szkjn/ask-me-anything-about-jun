@@ -10,6 +10,11 @@
   async function sendChatMessage() {
     if (!question.trim()) return;
 
+    // Add user's question to history immediately
+    history = [...history, { role: "user", content: question }];
+    let userQuestion = question; // Store the question temporarily
+    question = ""; // Clear input field for new entry
+
     loading = true;
     error = "";
 
@@ -19,16 +24,14 @@
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ question, history }),
+        body: JSON.stringify({ question: userQuestion, history }),
       });
 
       const data = await response.json();
       console.log("API response", data);
 
       if (response.ok && data.answer) {
-        history = [...history, { role: "user", content: question }];
         history = [...history, { role: "assistant", content: data.answer }];
-        question = "";
       } else {
         error =
           data.error || "An error occurred while processing your question.";
@@ -42,14 +45,12 @@
 </script>
 
 <main class="container">
-  <h2>Ask Me Anything (About Myself)</h2>
+  <div class="header"><h2>Chat with Jun Suzuki's CV</h2></div>
 
   <div class="chat-box">
     {#each history as msg (msg.content)}
-      {msg.role}
       <div class="message {msg.role}">
         {@html marked(msg.content)}
-        <!-- Render content with Markdown -->
       </div>
     {/each}
   </div>
@@ -64,8 +65,17 @@
       on:keydown={(e) => e.key === "Enter" && sendChatMessage()}
     />
 
-    <button on:click={sendChatMessage} class="button" disabled={loading}>
-      {loading ? "Sending..." : "Send"}
+    <button
+      on:click={sendChatMessage}
+      class="button"
+      disabled={loading || !question.trim()}
+    >
+      <img
+        src="https://img.icons8.com/ios-filled/50/000000/up.png"
+        alt="Up Arrow"
+        title="Up arrow icons created by Roundicons Premium - Flaticon"
+        style="width: 25px; height: 25px;"
+      />
     </button>
   </div>
 
@@ -76,69 +86,86 @@
 
 <style>
   .container {
-    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    height: 98vh;
+    max-width: 700px;
     margin: 0 auto;
-    text-align: center;
-    padding: 0 20px;
     font-family: Arial, sans-serif;
-    background-color: #f0f6fc;
     background-color: #0d1117;
     color: #bbb;
     border-radius: 6px;
-    border: 1px solid #555;
+    /* border: 1px solid #555; */
     min-height: 80vh;
   }
-  h2 {
-    text-align: left;
+  .header {
+    border-bottom: 1px solid #333;
   }
   .chat-box {
-    max-height: 400px;
-    overflow-y: auto;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    padding: 10px;
+    width: 100%;
+    max-height: 74vh;
+    padding: 1rem 0 2rem 0;
+    /* border: 1px solid #ddd; */
     color: #ddd;
-    height: 80vh;
+    height: 80%;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    overflow-y: auto;
   }
   .message {
     display: block;
     margin-bottom: 10px;
+    margin-left: auto;
   }
   .message.user {
-    text-align: right;
+    background-color: #151b23;
+    border-radius: 20px;
     color: #ddd;
+    padding: 1px 1.1rem;
+    width: fit-content;
+    margin-bottom: 1rem;
   }
   .message.assistant {
     text-align: left;
     color: #ddd;
-    font-weight: bold;
+    padding-bottom: 2rem;
   }
   .input-section {
-    width: 100%;
+    width: 700px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #0d1117;
+    padding: 26px 0 20px 0;
+    box-shadow: inset 0 1px 0 0 #333;
+    /* border: 1px solid red; */
   }
   .input {
-    width: 80%;
+    width: 90%;
     padding: 10px;
-    margin-bottom: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
     background-color: #151b23;
     color: #f0f6fc;
   }
   .button {
-    padding: 10px 20px;
-    background-color: #007bff;
+    padding: 7px 20px;
+    background-color: #ddd;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer;
-    width: 18%;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .button:disabled {
-    background-color: #ccc;
+    background-color: #555;
     cursor: not-allowed;
   }
   .answer {
