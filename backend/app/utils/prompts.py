@@ -17,3 +17,13 @@ SYSTEM_PROMPT = """You are a helpful assistant with access to Jun's documents an
 
 - **No Hallucination**: Always verify answers against the provided data. If something is uncertain or missing, state that clearly without attempting to guess or infer beyond the data.
 """
+
+
+ANSWER_PATH_ASSESSMENT_PROMPT = """Assess if the following question is about :
+- General information about Jun that you'd find in his CV (answer_path=0)
+- Recent activities that you'd find in his RSS blog feed (answer_path=1)
+
+Give a quick explanation (30 tokens max) of why.
+
+Question:"
+"""

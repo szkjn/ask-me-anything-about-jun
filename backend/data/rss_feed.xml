@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Creative Insights</title>
+    <link>http://junsuzuki.io/</link>
+    <description>Updates and explorations in the intersection of technology, art, and creativity.</description>
+    <language>en-us</language>
+
+    <item>
+      <title>Singularity and Creation in the Age of Artificial Intelligence</title>
+      <link>http://junsuzuki.io/singularity-ai</link>
+      <description>
+        Thrilled to announce our contribution to the CNC Lab initiative: 'Singularity and Creation in the Age of Artificial Intelligence: Interdisciplinary Perspectives' with Ninon Devis. Our project dives into the complex relationship between generative AI and artistic singularity.
+
+        How can AI transcend imitation to foster true innovation in art? We explore concepts like 'active divergence' and the 'temperature parameter' to push the boundaries of creative expression, whether in text, sound, or visuals. The goal? To embrace AI as a collaborator, not a competitor, in the artistic process.
+
+        This work sits at the intersection of art, technology, and philosophy, reflecting on how AI compares to historical artistic shifts like photography and cinema. We aim to celebrate diversity and preserve creative individuality in the digital age.
+
+        Looking forward to engaging with creatives and technologists to further this dialogue!
+      </description>
+      <pubDate>Tue, 01 Oct 2024 00:00:00 +0000</pubDate>
+      <category>Generative AI</category>
+      <category>Artistic Singularity</category>
+      <category>Innovation</category>
+      <category>Creativity</category>
+      <category>Interdisciplinary Research</category>
+      <category>CNC Lab</category>
+    </item>
+
+    <item>
+      <title>Radio Art and Freedom of Expression</title>
+      <link>http://junsuzuki.io/radio-art-freedom</link>
+      <description>
+        Participated in a panel talk on 'Radio Art and Freedom of Expression' at the Signals2Noise Radio Community Festival hosted by Goethe-Institut Budapest. Created and performed 'I dream of a sphere without corners', exploring sounds that evade borders using Web-Software Defined Radio and Machine Learning agents.
+      </description>
+      <pubDate>Tue, 05 Nov 2024 00:00:00 +0000</pubDate>
+      <category>Radio Art</category>
+      <category>Freedom of Expression</category>
+      <category>Machine Learning</category>
+      <category>Soundscape</category>
+      <category>Borders</category>
+    </item>
+
+    <item>
+      <title>GenAI Tour: Insights and Frameworks</title>
+      <link>http://junsuzuki.io/genai-tour</link>
+      <description>
+        Visited Groupe Havana Grenoble as part of the GenAI tour with Data2i. Presented insights on RAG frameworks, LangChain, LlamaIndex, and highlighted Mistral AI's data privacy approach compared to OpenAI.
+      </description>
+      <pubDate>Sat, 19 Oct 2024 00:00:00 +0000</pubDate>
+      <category>GenAI</category>
+      <category>RAG</category>
+      <category>LangChain</category>
+      <category>LlamaIndex</category>
+      <category>Mistral AI</category>
+      <category>Data Privacy</category>
+    </item>
+
+    <item>
+      <title>SoireeXD: Collaboration and Curiosity</title>
+      <link>http://junsuzuki.io/soireexd</link>
+      <description>
+        Spoke at hashtag#SoireeXD at Journee in Berlin, discussing transversality, collaboration, interactivity, and curiosity in blending tech and art. Emphasized building bridges over walls amidst rising fascism in Europe.
+      </description>
+      <pubDate>Sun, 15 Sep 2024 00:00:00 +0000</pubDate>
+      <category>Transversality</category>
+      <category>Collaboration</category>
+      <category>Interactivity</category>
+      <category>Curiosity</category>
+      <category>Tech and Art</category>
+      <category>Fascism</category>
+    </item>
+
+    <item>
+      <title>Generative AI: Practical Use Cases</title>
+      <link>http://junsuzuki.io/generative-ai-lyon</link>
+      <description>
+        Presented generative AI topics at Groupe Havana Lyon, covering practical use cases, prompt engineering strategies, and techniques like RAG. Engaged with clients and collaborators.
+      </description>
+      <pubDate>Tue, 10 Sep 2024 00:00:00 +0000</pubDate>
+      <category>Generative AI</category>
+      <category>Prompt Engineering</category>
+      <category>RAG</category>
+      <category>Collaboration</category>
+    </item>
+
+    <item>
+      <title>Observee In Situ: Interactive Installation</title>
+      <link>http://junsuzuki.io/observee-in-situ</link>
+      <description>
+        Co-presented 'Observee In Situ', a real-time AI-generated interactive installation with Emilia Gentis at Exgirlfriend Gallery in Berlin. The installation explored themes of surveillance, self-perception, and AI bias.
+      </description>
+      <pubDate>Thu, 06 Jun 2024 00:00:00 +0000</pubDate>
+      <category>Interactive Installation</category>
+      <category>AI</category>
+      <category>Surveillance</category>
+      <category>Self-Perception</category>
+      <category>Bias</category>
+    </item>
+  </channel>
+</rss>

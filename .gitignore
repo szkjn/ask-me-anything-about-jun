@@ -6,11 +6,11 @@ frontend/.env
 
 # Back end
 backend/venv/
-*/__pycache__/*
-backend/*.pyc
-backend/*.pyo
 backend/.env
 venv/
+__pycache__
+*.pyc
+*.pyo
 
 # Logs and temp files
 *.log
