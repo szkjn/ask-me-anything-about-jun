@@ -46,7 +46,7 @@ The backend is a Flask-based application responsible for:
 
 **Directory Structure**
 
-```
+```bash
 backend/
 │
 ├── app/                        # Application folder
@@ -54,17 +54,56 @@ backend/
 │   ├── models/                 # Embeddings and mappings
 │   │   ├── embeddings.index    # FAISS index file
 │   │   └── filenames.json      # Mapping of document filenames
+│   ├── routes/                 # Blueprint for handling routes
+│   │   └── chat.py             # Endpoint for handling chat requests
+│   ├── services/               # Modularized services
+│   │   ├── faiss_service.py    # Service for FAISS-related tasks
+│   │   ├── rss_service.py      # Service for RSS feed-related tasks
+│   │   └── openai_service.py   # Service for OpenAI-related tasks
 │   └── utils/                  # Utility functions and constants
-│       └── config.py           # Configurations for API keys, paths, etc.
+│       ├── config.py           # Configurations for API keys, paths, etc.
+│       ├── logging.py          # Setup for logging
+│       └── prompts.py          # Prompts used in the app
+│
+├── embeddings/                 # Preprocessing scripts
+|   └── embeddings.jso          # Embeddings for documents
 │
 ├── preprocessing/              # Preprocessing scripts
 │   ├── index_embeddings.py     # Script to generate FAISS index
 │   └── upload_files.py         # Script to upload documents
 │
 └── data/                       # Documents for context
+    ├── rss_feed.xml            # Recent activities
     └── cv.md                   # My CV
 
 ```
+
+backend/
+│
+├── app/ # Application folder
+│ ├── app.py # Main Flask app
+│ ├── models/ # Embeddings and mappings
+│ │ ├── embeddings.index # FAISS index file
+│ │ └── filenames.json # Mapping of document filenames
+│ ├── routes/ # Blueprint for handling routes
+│ │ └── chat.py # Endpoint for handling chat requests
+│ └── utils/ # Utility functions and constants
+│ ├── config.py # Configurations for API keys, paths, etc.
+│ ├── logging.py # Setup for logging
+│ └── openai_service.py # Service for OpenAI-related tasks
+│
+├── preprocessing/ # Preprocessing scripts
+│ ├── index_embeddings.py # Script to generate FAISS index
+│ └── upload_files.py # Script to upload documents
+│
+├── data/ # Documents for context
+│ ├── cv.md # My CV
+│ └── rss_feed.xml # My RSS blog feed
+│
+└── services/ # Services for various tasks
+├── faiss_service.py # Service for FAISS-related tasks
+├── rss_service.py # Service for RSS feed-related tasks
+└── prompts.py # Prompts used in the app
 
 ### Frontend
 
