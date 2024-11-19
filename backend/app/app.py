@@ -6,8 +6,16 @@ import os
 import json
 import numpy as np
 import faiss
-from utils.config import OPENAI_API_KEY, INDEX_FILE, FILENAMES_FILE, DATA_FOLDER
-from utils.prompts import SYSTEM_PROMPT
+import xml.etree.ElementTree as ET
+
+from utils.config import (
+    OPENAI_API_KEY,
+    INDEX_FILE,
+    FILENAMES_FILE,
+    DATA_FOLDER,
+    AnswerPath,
+)
+from utils.prompts import SYSTEM_PROMPT, ANSWER_PATH_ASSESSMENT_PROMPT
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -18,6 +26,26 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
+
+# Load recent activities from RSS feed
+recent_activities = []
+try:
+    tree = ET.parse(os.path.join(DATA_FOLDER, "rss_feed.xml"))
+    root = tree.getroot()
+
+    # Assuming the RSS feed follows standard structure
+    for item in root.findall("./channel/item"):
+        activity = {
+            "title": item.find("title").text,
+            "description": item.find("description").text,
+            "link": item.find("link").text,
+            "pubDate": item.find("pubDate").text,
+        }
+        recent_activities.append(activity)
+
+    logging.info("Recent activities loaded successfully from RSS feed.")
+except Exception as e:
+    logging.error(f"Failed to load recent activities: {e}")
 
 # Initialize OpenAI client
 try:
@@ -64,6 +92,7 @@ def chat():
     data = request.json
     question = data.get("question", "")
     history = data.get("history", [])
+    uploaded_recent_activities = False
 
     if not question:
         logging.warning("No question provided.")
@@ -72,21 +101,51 @@ def chat():
     try:
         # Append SYSTEM_PROMPT to the history at the beginning
         history.insert(0, {"role": "system", "content": SYSTEM_PROMPT})
-        
-        # Generate embedding for the question
-        response = client.embeddings.create(
-            model="text-embedding-ada-002", input=question
-        )
-        query_embedding = np.array(response.data[0].embedding, dtype="float32").reshape(
-            1, -1
-        )
 
-        # Perform similarity search
-        distances, indices = index.search(query_embedding, k=3)  # Retrieve top 3 docs
-        retrieved_docs = [filenames[idx] for idx in indices[0]]
-        context = "\n\n".join(
-            [document_map[doc] for doc in retrieved_docs if doc in document_map]
+        # Quick assessment for recent activities
+        assessment_message = ANSWER_PATH_ASSESSMENT_PROMPT + question
+
+        assessment_response = client.beta.chat.completions.parse(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": assessment_message}],
+            max_tokens=40,
+            response_format=AnswerPath,
         )
+        assessment_answer = assessment_response.choices[0].message.parsed
+        logging.info(f"Answer Path Assessment: {assessment_answer.answer_path}")
+
+        # Determine if the question is about recent activities
+        if assessment_answer.answer_path == 1:
+
+            context = "\n\n".join(
+                activity["description"] for activity in recent_activities
+            )
+
+            if uploaded_recent_activities == False:
+                prompt = f"Context: {context}\n\nQuestion: {question}"
+            else:
+                prompt = f"Refer to the context (recent activities) previously shared. Question: {question}"
+
+            history.append({"role": "user", "content": prompt})
+
+            uploaded_recent_activities = True
+        else:
+            # Generate embedding for the user question for document search
+            response = client.embeddings.create(
+                model="text-embedding-ada-002", input=question
+            )
+            query_embedding = np.array(
+                response.data[0].embedding, dtype="float32"
+            ).reshape(1, -1)
+
+            # Perform similarity search for document embeddings
+            distances, indices = index.search(
+                query_embedding, k=3
+            )  # Retrieve top 3 docs
+            retrieved_docs = [filenames[idx] for idx in indices[0]]
+            context = "\n\n".join(
+                [document_map[doc] for doc in retrieved_docs if doc in document_map]
+            )
 
         # Append context to chat history
         history.append(
@@ -98,34 +157,18 @@ def chat():
 
         def generate():
             stream = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=history,
-                max_tokens=1000,
-                stream=True
+                model="gpt-4o-mini", messages=history, max_tokens=1000, stream=True
             )
 
             for chunk in stream:
                 if chunk.choices[0].delta.content is not None:
-                    print(chunk.choices[0].delta.content)
                     yield chunk.choices[0].delta.content
 
-        print("Streaming response...")
-        print(Response(generate(), content_type='text/event-stream'))
-        # Run the generator
-        return Response(generate(), content_type='text/event-stream', headers={"X-Complete-Answer": complete_answer})
-
-
-
-        # # Generate answer using ChatCompletion with history
-        # chat_response = client.beta.chat.completions.parse(
-        #     model="gpt-4o-mini", messages=history, max_tokens=1000
-        # )
-        # answer = chat_response.choices[0].message.content.strip()
-
-        # # Add assistant's response to the history
-        # history.append({"role": "assistant", "content": answer})
-        # logging.info("Chat response generated successfully.")
-        # return jsonify({"answer": answer, "history": history})
+        return Response(
+            generate(),
+            content_type="text/event-stream",
+            headers={"X-Complete-Answer": complete_answer},
+        )
 
     except Exception as e:
         logging.error(f"Error in /chat endpoint: {e}")

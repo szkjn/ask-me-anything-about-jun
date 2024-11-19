@@ -1,0 +1,72 @@
+{
+    "posts": [
+        {
+            "content": "Thrilled to announce our contribution to the CNC Lab initiative: 'Singularity and Creation in the Age of Artificial Intelligence: Interdisciplinary Perspectives' with Ninon Devis. Our project dives into the complex relationship between generative AI and artistic singularity. 🌌\n\nHow can AI transcend imitation to foster true innovation in art? We explore concepts like 'active divergence' and the 'temperature parameter' to push the boundaries of creative expression, whether in text, sound, or visuals. The goal? To embrace AI as a collaborator, not a competitor, in the artistic process.\n\nThis work sits at the intersection of art, technology, and philosophy, reflecting on how AI compares to historical artistic shifts like photography and cinema. We aim to celebrate diversity and preserve creative individuality in the digital age.\n\nLooking forward to engaging with creatives and technologists to further this dialogue! 💡",
+            "date": "2024-10-01",
+            "keywords": [
+                "Generative AI",
+                "Artistic Singularity",
+                "Innovation",
+                "Creativity",
+                "Interdisciplinary Research",
+                "CNC Lab"
+            ]
+        },
+        {
+            "content": "Participated in a panel talk on 'Radio Art and Freedom of Expression' at the Signals2Noise Radio Community Festival hosted by Goethe-Institut Budapest. Created and performed 'I dream of a sphere without corners', exploring sounds that evade borders using Web-Software Defined Radio and Machine Learning agents.",
+            "date": "2024-11-05",
+            "keywords": [
+                "Radio Art",
+                "Freedom of Expression",
+                "Machine Learning",
+                "Soundscape",
+                "Borders"
+            ]
+        },
+        {
+            "content": "Visited Groupe Havana Grenoble as part of the GenAI tour with Data2i. Presented insights on RAG frameworks, LangChain, LlamaIndex, and highlighted Mistral AI's data privacy approach compared to OpenAI.",
+            "date": "2024-10-19",
+            "keywords": [
+                "GenAI",
+                "RAG",
+                "LangChain",
+                "LlamaIndex",
+                "Mistral AI",
+                "Data Privacy"
+            ]
+        },
+        {
+            "content": "Spoke at hashtag#SoireeXD at Journee in Berlin, discussing transversality, collaboration, interactivity, and curiosity in blending tech and art. Emphasized building bridges over walls amidst rising fascism in Europe.",
+            "date": "2024-09-15",
+            "keywords": [
+                "Transversality",
+                "Collaboration",
+                "Interactivity",
+                "Curiosity",
+                "Tech and Art",
+                "Fascism"
+            ]
+        },
+        {
+            "content": "Presented generative AI topics at Groupe Havana Lyon, covering practical use cases, prompt engineering strategies, and techniques like RAG. Engaged with clients and collaborators.",
+            "date": "2024-09-10",
+            "keywords": [
+                "Generative AI",
+                "Prompt Engineering",
+                "RAG",
+                "Collaboration"
+            ]
+        },
+        {
+            "content": "Co-presented 'Observee In Situ', a real-time AI-generated interactive installation with Emilia Gentis at Exgirlfriend Gallery in Berlin. The installation explored themes of surveillance, self-perception, and AI bias.",
+            "date": "2024-06-06",
+            "keywords": [
+                "Interactive Installation",
+                "AI",
+                "Surveillance",
+                "Self-Perception",
+                "Bias"
+            ]
+        }
+    ]
+}
