@@ -20,8 +20,8 @@ SYSTEM_PROMPT = """You are a helpful assistant with access to Jun's documents an
 
 
 ANSWER_PATH_ASSESSMENT_PROMPT = """Assess if the following question is about :
-- General information about Jun that you'd find in his CV (answer_path=0)
-- Recent activities that you'd find in his RSS blog feed (answer_path=1)
+- GENERAL INFORMATION a recruiter would ask about Jun, namely information that you'd find in his CV (answer_path=0)
+- RECENT ACTIVITIES like talks or publications (not job experiences) that you'd find in his RSS blog feed (answer_path=1)
 
 Give a quick explanation (30 tokens max) of why.
 
