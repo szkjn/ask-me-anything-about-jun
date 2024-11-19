@@ -5,6 +5,7 @@
   let loading = false;
   let error = "";
   let history = [];
+  let initialState = true;
 
   // Function to send the question to the backend
   async function sendChatMessage() {
@@ -12,6 +13,8 @@
 
     // Add user's question to history immediately
     history = [...history, { role: "user", content: question }];
+    initialState = false;
+
     let userQuestion = question; // Store the question temporarily
     question = ""; // Clear input field for new entry
 
@@ -71,11 +74,15 @@
   <div class="header"><h2>Chat with Jun Suzuki's CV</h2></div>
 
   <div class="chat-box">
-    {#each history as msg (msg.content)}
-      <div class="message {msg.role}">
-        {@html marked(msg.content)}
-      </div>
-    {/each}
+    {#if initialState}
+      <div class="initial-message">Ask me anything</div>
+    {:else}
+      {#each history as msg (msg.content)}
+        <div class="message {msg.role}">
+          {@html marked(msg.content)}
+        </div>
+      {/each}
+    {/if}
   </div>
 
   <div class="input-section">
@@ -135,6 +142,13 @@
     font-size: 0.9rem;
     line-height: 1.5;
     overflow-y: auto;
+  }
+  .initial-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 1.25rem;
   }
   .message {
     display: block;
