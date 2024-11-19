@@ -42,7 +42,7 @@ Je suis également speaker sur des sujets d'IA, partageant mes connaissances lor
 
 ### Compétences techniques
 
-- **Langages de Programmation** (Python, Go, SQL, TypeScript)
+- **Langages de Programmation** Python (5 ans), Go (2 ans), SQL (3 ans), TypeScript (5 ans)
 - **Data Science & NLP** (Pandas, NLTK, Spacy, Sklearn, Tensorflow, OpenCV, OCR, Regexp, Text Mining)
 - **Visualisation des Données** (Dash, Plotly, d3.js, Power BI, Grafana)
 - **Conformité des Données** (RGPD, AI Act, FHIR, HL7v2)
