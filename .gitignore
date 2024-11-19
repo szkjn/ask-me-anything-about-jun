@@ -6,7 +6,7 @@ frontend/.env
 
 # Back end
 backend/venv/
-backend/__pycache__/
+*/__pycache__/*
 backend/*.pyc
 backend/*.pyo
 backend/.env
