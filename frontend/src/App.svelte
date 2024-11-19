@@ -27,15 +27,38 @@
         body: JSON.stringify({ question: userQuestion, history }),
       });
 
-      const data = await response.json();
-      console.log("API response", data);
-
-      if (response.ok && data.answer) {
-        history = [...history, { role: "assistant", content: data.answer }];
-      } else {
-        error =
-          data.error || "An error occurred while processing your question.";
+      if (!response.ok) {
+        throw new Error(
+          (await response.json()).error || "Error processing the message."
+        );
       }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      let accumulatedResponse = ""; // Use this to accumulate the complete response
+
+      // Add a placeholder message for the assistant
+      const assistantMessage = { role: "assistant", content: "" };
+      history = [...history, assistantMessage];
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        accumulatedResponse += chunk;
+
+        // Update the assistant message in the history with current accumulated response
+        assistantMessage.content = accumulatedResponse;
+        history = [...history.slice(0, -1), assistantMessage]; // Update only the last assistant message
+      }
+
+      // Finalize response addition to the history
+      history = [
+        ...history.slice(0, -1),
+        { role: "assistant", content: accumulatedResponse },
+      ];
     } catch (err) {
       error = "Failed to connect to the backend.";
     } finally {
@@ -92,20 +115,21 @@
     max-width: 700px;
     margin: 0 auto;
     font-family: Arial, sans-serif;
-    background-color: #0d0d0d;
+    background-color: #222;
     color: #bbb;
     border-radius: 6px;
     /* border: 1px solid #555; */
     min-height: 80vh;
   }
   .header {
-    border-bottom: 1px solid #333;
+    /* border-bottom: 1px solid #333; */
   }
   .chat-box {
-    width: 100%;
-    max-height: 74vh;
-    padding: 1rem 0 2rem 0;
+    /* width: 100%; */
+    max-height: 67vh;
+    padding: 1rem 1rem 2rem 1rem;
     /* border: 1px solid #ddd; */
+    background-color: #111;
     color: #ddd;
     height: 80%;
     font-size: 0.9rem;
@@ -118,17 +142,17 @@
     margin-left: auto;
   }
   .message.user {
-    background-color: #151515;
+    background-color: #181818;
     border-radius: 20px;
     color: #ddd;
-    padding: 1px 1.1rem;
+    padding: 1px 1.25rem;
     width: fit-content;
     margin-bottom: 1rem;
   }
   .message.assistant {
     text-align: left;
     color: #ddd;
-    padding-bottom: 2rem;
+    /* padding-bottom: 1rem; */
   }
   .input-section {
     width: 700px;
@@ -139,9 +163,9 @@
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #0d0d0d;
+    background-color: #222;
     padding: 26px 0 20px 0;
-    box-shadow: inset 0 1px 0 0 #333;
+    /* box-shadow: inset 0 1px 0 0 #333; */
     /* border: 1px solid red; */
   }
   .input {

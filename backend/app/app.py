@@ -1,5 +1,5 @@
 import logging
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 from openai import OpenAI
 import os
@@ -43,7 +43,7 @@ try:
 
     # Load all documents into a dictionary for mapping filenames to content
     document_map = {}
-    for filename in filenames:  # filenames is from filenames.json
+    for filename in filenames:
         file_path = os.path.join(DATA_FOLDER, filename)
         if os.path.exists(file_path):
             with open(file_path, "r", encoding="utf-8") as file:
@@ -63,13 +63,16 @@ def chat():
     logging.info("Received a new chat message")
     data = request.json
     question = data.get("question", "")
-    history = data.get("history", [])  # Expecting a list of message objects
+    history = data.get("history", [])
 
     if not question:
         logging.warning("No question provided.")
         return jsonify({"error": "No question provided"}), 400
 
     try:
+        # Append SYSTEM_PROMPT to the history at the beginning
+        history.insert(0, {"role": "system", "content": SYSTEM_PROMPT})
+        
         # Generate embedding for the question
         response = client.embeddings.create(
             model="text-embedding-ada-002", input=question
@@ -90,16 +93,39 @@ def chat():
             {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}
         )
 
-        # Generate answer using ChatCompletion with history
-        chat_response = client.beta.chat.completions.parse(
-            model="gpt-4o-mini", messages=history, max_tokens=1000
-        )
-        answer = chat_response.choices[0].message.content.strip()
+        # Initialize an empty string to accumulate the assistant's response
+        complete_answer = ""
 
-        # Add assistant's response to the history
-        history.append({"role": "assistant", "content": answer})
-        logging.info("Chat response generated successfully.")
-        return jsonify({"answer": answer, "history": history})
+        def generate():
+            stream = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=history,
+                max_tokens=1000,
+                stream=True
+            )
+
+            for chunk in stream:
+                if chunk.choices[0].delta.content is not None:
+                    print(chunk.choices[0].delta.content)
+                    yield chunk.choices[0].delta.content
+
+        print("Streaming response...")
+        print(Response(generate(), content_type='text/event-stream'))
+        # Run the generator
+        return Response(generate(), content_type='text/event-stream', headers={"X-Complete-Answer": complete_answer})
+
+
+
+        # # Generate answer using ChatCompletion with history
+        # chat_response = client.beta.chat.completions.parse(
+        #     model="gpt-4o-mini", messages=history, max_tokens=1000
+        # )
+        # answer = chat_response.choices[0].message.content.strip()
+
+        # # Add assistant's response to the history
+        # history.append({"role": "assistant", "content": answer})
+        # logging.info("Chat response generated successfully.")
+        # return jsonify({"answer": answer, "history": history})
 
     except Exception as e:
         logging.error(f"Error in /chat endpoint: {e}")
