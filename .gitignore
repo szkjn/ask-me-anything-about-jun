@@ -11,6 +11,7 @@ backend/*.pyc
 backend/*.pyo
 backend/.env
 venv/
+*pyc
 
 # Logs and temp files
 *.log
