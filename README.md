@@ -164,6 +164,12 @@ venv\Scripts\activate  # source venv/bin/activate on Unix or MacOS
 pip install -r requirements.txt
 ```
 
+4. Configure OpenAI API Key: Open `backend/app/utils/config.py` and set your OpenAI API key:
+
+```bash
+OPENAI_API_KEY = os.environ.get([insert-your-key])
+```
+
 4. Generate Embeddings: Run the preprocessing script to generate embeddings and the FAISS index.
 
 ```bash
