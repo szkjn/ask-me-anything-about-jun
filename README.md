@@ -12,7 +12,13 @@ The app comprises a frontend (built with Svelte) and a backend (built with Flask
    - Users can input a question and press Enter or click Submit to send their query.
 2. **Dynamic Answer Generation:**
    - The app retrieves relevant information from pre-uploaded documents about Jun and generates a natural language answer.
-3. **RAG Workflow:**
+3. **General Information Responses:**
+   - If users ask general questions, the app provides an answer based on Jun's CV.
+4. **Recent Activities Context:**
+   - If users inquire about recent activities, the app includes an RSS feed context to deliver the latest news about Jun's activities.
+5. **Relevant Questions Suggestion:**
+   - The application suggests relevant questions based on the context of the latest question and answer interaction.
+6. **RAG Workflow:**
    - Uses FAISS to retrieve the most relevant document snippets and passes them as context to OpenAI’s chat model.
 
 ## Architecture
@@ -39,9 +45,15 @@ The backend is a Flask-based application responsible for:
    - Mapping between filenames and embeddings is stored in `filenames.json`.
 
 2. **RAG Pipeline:**
+
    - Embeddings for the question are matched with the FAISS index to retrieve relevant documents.
    - Retrieved content is combined into context for OpenAI’s GPT model.
-3. **Logging:**
+
+3. **Query Handling:**
+
+   - The backend determines whether to respond with general information from the CV or recent activities from the RSS feed based on the user's question.
+
+4. **Logging:**
    - Detailed logs for debugging and tracing user queries and backend responses.
 
 **Directory Structure**
@@ -63,10 +75,11 @@ backend/
 │   └── utils/                  # Utility functions and constants
 │       ├── config.py           # Configurations for API keys, paths, etc.
 │       ├── logging.py          # Setup for logging
+│       ├── schemas.py          # Pydantic schemas for data validation
 │       └── prompts.py          # Prompts used in the app
 │
 ├── embeddings/                 # Preprocessing scripts
-|   └── embeddings.jso          # Embeddings for documents
+|   └── embeddings.json         # Embeddings for documents
 │
 ├── preprocessing/              # Preprocessing scripts
 │   ├── index_embeddings.py     # Script to generate FAISS index
@@ -77,33 +90,6 @@ backend/
     └── cv.md                   # My CV
 
 ```
-
-backend/
-│
-├── app/ # Application folder
-│ ├── app.py # Main Flask app
-│ ├── models/ # Embeddings and mappings
-│ │ ├── embeddings.index # FAISS index file
-│ │ └── filenames.json # Mapping of document filenames
-│ ├── routes/ # Blueprint for handling routes
-│ │ └── chat.py # Endpoint for handling chat requests
-│ └── utils/ # Utility functions and constants
-│ ├── config.py # Configurations for API keys, paths, etc.
-│ ├── logging.py # Setup for logging
-│ └── openai_service.py # Service for OpenAI-related tasks
-│
-├── preprocessing/ # Preprocessing scripts
-│ ├── index_embeddings.py # Script to generate FAISS index
-│ └── upload_files.py # Script to upload documents
-│
-├── data/ # Documents for context
-│ ├── cv.md # My CV
-│ └── rss_feed.xml # My RSS blog feed
-│
-└── services/ # Services for various tasks
-├── faiss_service.py # Service for FAISS-related tasks
-├── rss_service.py # Service for RSS feed-related tasks
-└── prompts.py # Prompts used in the app
 
 ### Frontend
 
@@ -126,7 +112,11 @@ The frontend is a Svelte-based application that provides a user-friendly interfa
 
    - The main Svelte component handling user input, API calls, and response rendering.
 
-2. **API Integration:**
+2. **Question Suggestions:**
+
+Suggests relevant follow-up questions based on the latest interaction.
+
+3. **API Integration:**
    - Sends user queries to the `/ask` endpoint in the backend.
 
 **Directory Structure:**
@@ -216,3 +206,10 @@ npm run dev
 2. Open the app in your browser.
 3. Type a question about Jun and press Enter or click Submit.
 4. View the response dynamically generated based on Jun's documents.
+
+## Improvements
+
+- **Tests**: Add unit tests for backend services and frontend components to ensure functionality and reliability.
+- **CI/CD**: Add GitHub Actions for continuous integration and deployment to automate the testing and deployment process.
+- **Error Handling:** Implement more robust error handling for API calls and edge cases.
+- **UI/UX Enhancements:** Improve the user interface and user experience, such as adding loading indicators and better styling.
