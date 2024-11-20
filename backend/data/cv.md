@@ -56,7 +56,7 @@ Je suis également speaker sur des sujets d'IA, partageant mes connaissances lor
 
 ### Consulting & IA
 
-- **Prototypage et Mise en oeuvre de Solutions IA** (Développement de prototypes IA avec OpenAI, MistralAI, LangChain, LlamaIndex, et RAG)
+- **Prototypage et Mise en oeuvre de Solutions IA** (Développement de prototypes IA avec OpenAI, MistralAI, RAG (LangChain, FAISS), Ollama)
 - **Sensibilisation aux Enjeux de Sécurité IA** (Prévention des risques liés à l'IA (biais, sécurité des données) et recommandations)
 - **Identification et Conseil sur les Cas d'Usage IA** (Analyse des besoins, proposition d'outils IA adaptés et bonnes pratiques)
 

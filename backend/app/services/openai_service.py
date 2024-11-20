@@ -105,9 +105,10 @@ class OpenAIService:
                 model="gpt-4o-mini",
                 messages=[
                     {"role": "system", "content": FOLLOW_UP_QUESTION_PROMPT},
-                    {"role": "user", "content": follow_up_context}],
+                    {"role": "user", "content": follow_up_context},
+                ],
                 max_tokens=200,
-                response_format=FollowUpQuestions
+                response_format=FollowUpQuestions,
             )
 
             # Parse the follow-up questions from the chat response

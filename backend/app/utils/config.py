@@ -16,5 +16,5 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY_HAVANA")
 EXAMPLE_QUESTIONS = [
     "Do you have experience in data engineering ?",
     "For how long have you been working in AI ?",
-    "What have you been up to lately ?"
+    "What have you been up to lately ?",
 ]

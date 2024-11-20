@@ -52,15 +52,21 @@ class FaissService:
         Returns:
             document_map: A dictionary mapping filenames to their corresponding documents.
         """
-        document_map = {}
-        for filename in self.filenames:
-            file_path = os.path.join(DATA_FOLDER, filename)
-            if os.path.exists(file_path):
-                with open(file_path, "r", encoding="utf-8") as file:
-                    document_map[filename] = file.read()
-            else:
-                logging.warning(f"Document {filename} does not exist.")
-        return document_map
+        logging.info("Loading documents...")
+        try:
+            document_map = {}
+            for filename in self.filenames:
+                file_path = os.path.join(DATA_FOLDER, filename)
+                if os.path.exists(file_path):
+                    with open(file_path, "r", encoding="utf-8") as file:
+                        document_map[filename] = file.read()
+                else:
+                    logging.warning(f"Document {filename} does not exist.")
+            logging.info("Documents loaded successfully.")
+            return document_map
+        except Exception as e:
+            logging.error(f"Failed to load documents: {e}")
+            raise e
 
     def search_documents(self, question) -> str:
         """
@@ -75,21 +81,27 @@ class FaissService:
         Returns:
             context: The content of the three most similar documents.
         """
-        query_embedding = np.array(
-            self.generate_embedding(question), dtype="float32"
-        ).reshape(1, -1)
-        distances, indices = self.index.search(query_embedding, k=3)
-        retrieved_docs = [self.filenames[idx] for idx in indices[0]]
-        context = "\n\n".join(
-            [
-                self.document_map[doc]
-                for doc in retrieved_docs
-                if doc in self.document_map
-            ]
-        )
-
-        return context
+        logging.info("Searching for similar documents...")
+        try:
+            query_embedding = np.array(
+                self.generate_embedding(question), dtype="float32"
+            ).reshape(1, -1)
+            distances, indices = self.index.search(query_embedding, k=3)
+            retrieved_docs = [self.filenames[idx] for idx in indices[0]]
+            context = "\n\n".join(
+                [
+                    self.document_map[doc]
+                    for doc in retrieved_docs
+                    if doc in self.document_map
+                ]
+            )
+            logging.info("Similar documents extracted")
+            return context
+        except Exception as e:
+            logging.error(f"Failed to search for similar documents: {e}")
+            raise e
 
     def generate_embedding(self, question) -> list:
         # Use the OpenAIService instance to get the embedding for the question
+        logging.info(f"Generating embedding for question: {question}")
         return self.openai_service.generate_embedding(question)
