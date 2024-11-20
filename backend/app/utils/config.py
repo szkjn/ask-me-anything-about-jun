@@ -1,5 +1,4 @@
 import os
-from pydantic import BaseModel
 
 # Input files
 EMBEDDINGS_FILE = os.path.abspath("embeddings/embeddings.json")
@@ -14,7 +13,8 @@ DATA_FOLDER = os.path.abspath("../data/")
 # API key
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY_HAVANA")
 
-
-class AnswerPath(BaseModel):
-    answer_path: int
-    explanation: str
+EXAMPLE_QUESTIONS = [
+    "Do you have experience in data engineering ?",
+    "For how long have you been working in AI ?",
+    "What have you been up to lately ?"
+]

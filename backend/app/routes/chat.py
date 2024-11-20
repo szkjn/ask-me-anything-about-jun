@@ -48,7 +48,7 @@ def chat() -> Response:
         {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}
     )
 
-    def generate() -> Response:
+    def generate():
         """
         Generates a streamed response from OpenAI based on the question and context.
 
@@ -60,4 +60,32 @@ def chat() -> Response:
             if chunk.choices[0].delta.content is not None:
                 yield chunk.choices[0].delta.content
 
+
     return Response(generate(), content_type="text/event-stream")
+
+
+@chat_bp.route("/follow-ups", methods=["POST"])
+def follow_up() -> Response:
+    """  
+    Endpoint for generating follow-up questions. 
+    
+    Accepts a JSON payload with a question and an answer.
+    
+    Returns:
+        Response: A list of follow-up questions.
+    """
+    logging.info("Received a request for follow-up questions")
+    data = request.json
+    question = data.get("question", "")
+    answer = data.get("answer", "")
+
+    if not question or not answer:
+        logging.warning("Question or answer not provided.")
+        return jsonify({"error": "Question and answer must be provided"}), 400
+
+    try:
+        follow_up_questions = openai_service.generate_follow_up_questions(question, answer)
+        return jsonify(follow_up_questions), 200
+    except Exception as e:
+        logging.error(f"Error generating follow-up questions: {e}")
+        raise

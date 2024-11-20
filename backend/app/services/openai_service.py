@@ -1,7 +1,9 @@
 import logging
+from typing import List
 from openai import OpenAI, Stream
-from utils.config import OPENAI_API_KEY, AnswerPath
-from utils.prompts import ANSWER_PATH_ASSESSMENT_PROMPT
+from utils.config import OPENAI_API_KEY
+from utils.schemas import AnswerPath, FollowUpQuestions
+from utils.prompts import ANSWER_PATH_ASSESSMENT_PROMPT, FOLLOW_UP_QUESTION_PROMPT
 
 
 class OpenAIService:
@@ -83,3 +85,40 @@ class OpenAIService:
         except Exception as e:
             logging.error(f"Error in assessing the question: {e}")
             return 0
+
+    def generate_follow_up_questions(self, question: str, answer: str) -> List[str]:
+        """
+        Generates two relevant follow-up questions based on the latest user's question and the corresponding answer.
+
+        Args:
+            question: The latest user's question.
+            answer: The most recent answer.
+
+        Returns:
+            List[str]: A list of two relevant follow-up questions.
+        """
+        logging.info("Generating follow-up questions")
+        follow_up_context = f"User's question: {question}\n\nAnswer: {answer}"
+
+        try:
+            follow_up_response = self.client.beta.chat.completions.parse(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": FOLLOW_UP_QUESTION_PROMPT},
+                    {"role": "user", "content": follow_up_context}],
+                max_tokens=200,
+                response_format=FollowUpQuestions
+            )
+
+            # Parse the follow-up questions from the chat response
+            follow_up_questions = follow_up_response.choices[0].message.parsed
+
+            results = [
+                follow_up_questions.follow_up_1,
+                follow_up_questions.follow_up_2,
+            ]
+
+            return results
+        except Exception as e:
+            logging.error(f"Error while generating follow-up questions: {e}")
+            raise
