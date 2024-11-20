@@ -20,9 +20,15 @@ The backend is a Flask-based application responsible for:
    - Mapping between filenames and embeddings is stored in `filenames.json`.
 
 2. **RAG Pipeline:**
+
    - Embeddings for the question are matched with the FAISS index to retrieve relevant documents.
    - Retrieved content is combined into context for OpenAI’s GPT model.
-3. **Logging:**
+
+3. **Query Handling:**
+
+   - The backend determines whether to respond with general information from the CV or recent activities from the RSS feed based on the user's question.
+
+4. **Logging:**
    - Detailed logs for debugging and tracing user queries and backend responses.
 
 **Directory Structure**
@@ -48,7 +54,7 @@ backend/
 │       └── prompts.py          # Prompts used in the app
 │
 ├── embeddings/                 # Preprocessing scripts
-|   └── embeddings.jso          # Embeddings for documents
+|   └── embeddings.json         # Embeddings for documents
 │
 ├── preprocessing/              # Preprocessing scripts
 │   ├── index_embeddings.py     # Script to generate FAISS index
