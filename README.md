@@ -154,6 +154,7 @@ git clone git@github.com:szkjn/ask-me-anything-about-jun.git
 1. Navigate to the Backend Folder:
 
 ```bash
+cd ask-me-anything-about-jun
 cd backend
 ```
 
