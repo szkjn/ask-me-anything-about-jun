@@ -143,6 +143,12 @@ frontend/
 3. OpenAI API Key (for embeddings and GPT responses)
 4. Node.js 20.10+ (frontend)
 
+### Clone repository
+
+```bash
+git clone git@github.com:szkjn/ask-me-anything-about-jun.git
+```
+
 ### Backend Setup
 
 1. Navigate to the Backend Folder:
@@ -173,8 +179,8 @@ OPENAI_API_KEY = os.environ.get([insert-your-key])
 4. Generate Embeddings: Run the preprocessing script to generate embeddings and the FAISS index.
 
 ```bash
-python preprocessing/upload_files.py
-python preprocessing/index_embeddings.py
+python -m preprocessing.upload_files
+python -m preprocessing.index_embeddings
 ```
 
 5. Run the Flask Application from `app/` folder:

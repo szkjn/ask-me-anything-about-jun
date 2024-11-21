@@ -7,7 +7,7 @@ The index will be used in the retrieval process to find the most similar documen
 import faiss
 import numpy as np
 import json
-from app.utils.config import EMBEDDINGS_FILE, INDEX_FILE, FILENAMES_FILE
+from app.utils.config import EMBEDDINGS_FILE
 
 # Load embeddings from the JSON file
 with open(EMBEDDINGS_FILE, "r") as f:
@@ -35,7 +35,7 @@ index.add(embeddings)
 Saves FAISS index as a binary file, and filenames as a JSON file.
 These files will be used in the retrieval process.
 """
-faiss.write_index(index, INDEX_FILE)
+faiss.write_index(index, "app/models/embeddings.index")
 
 with open(FILENAMES_FILE, "w") as f:
     json.dump(filenames, f)
